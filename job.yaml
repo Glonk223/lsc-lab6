@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: copy-content-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: busybox
+          image: busybox
+          command: ["sh", "-c", "echo '<h1>LSC Lab6 k8s!</h1>' > /mnt/nfs/index.html"]
+          volumeMounts:
+            - mountPath: /mnt/nfs
+              name: nfs-volume
+      volumes:
+        - name: nfs-volume
+          persistentVolumeClaim:
+            claimName: nfs-pvc
+      restartPolicy: Never
